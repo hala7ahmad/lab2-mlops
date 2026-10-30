@@ -1,13 +1,16 @@
+
 # Stage 1: Install dependencies
-FROM python:3.11.11-slim AS builder
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /build
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt && pip install --no-cache-dir --prefix=/install --upgrade "wheel>=0.46.2"
+
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt && \
+    pip install --no-cache-dir --prefix=/install --upgrade "wheel>=0.46.2"
 
 # Stage 2: Run the API
-FROM python:3.11.11-slim
+FROM python:3.11-slim-bookworm
 
 WORKDIR /app
 
@@ -15,6 +18,7 @@ COPY --from=builder /install /usr/local
 COPY src ./src
 COPY model.joblib .
 
+# Run as non-root user
 RUN useradd --create-home appuser
 USER appuser
 
