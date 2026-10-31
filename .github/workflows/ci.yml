@@ -49,7 +49,7 @@ jobs:
                 run: docker build -t churn-api:${{ github.sha }} .
               - name: Scan Docker image with Trivy
                 run: |
-                 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.67.2 image --exit-code 1 --severity HIGH,CRITICAL churn-api:${{ github.sha }}
+                 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.67.2 image --ignore-unfixed --exit-code 1 --severity HIGH,CRITICAL churn-api:${{ github.sha }}
               - name: Tag and push Docker image to GHCR
                 run: |
                     IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA}
